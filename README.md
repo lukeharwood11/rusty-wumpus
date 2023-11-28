@@ -1,1 +1,1 @@
-# rusty_wumpus
+# rusty-wumpus

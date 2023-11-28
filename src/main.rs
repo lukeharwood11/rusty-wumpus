@@ -1,7 +1,6 @@
 
-use rand::Rng;
-use wumpus::game::board::Board;
-use wumpus::game::player::Player;
+use rusty_wumpus::game::board::Board;
+use rusty_wumpus::game::player::Player;
 
 
 fn main() {
@@ -13,4 +12,5 @@ fn main() {
     println!("Width: {width}, Height: {height}");
     println!("Player Location: {:?}", player.location);
     println!("Number of cells: {}", board.cells.len());
+    println!("Board\n{}", board);
 }

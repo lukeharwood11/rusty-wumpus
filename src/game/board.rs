@@ -1,4 +1,4 @@
-
+use std::fmt::Display;
 use crate::util::Point;
 use crate::game::items::Item;
 use rand::Rng;
@@ -36,14 +36,35 @@ impl Board {
         &self.cells[xy]
     }
 }
-pub struct Cell {
-    items: Vec<Item>
+
+impl Display for Board {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut ret = String::new();
+        for x in 0..self.width {
+            let mut y_str = String::new();
+            for y in 0..self.height {
+                let cell = self.get_cell(Point(x, y));
+                y_str.push_str(" | ");
+                y_str.push_str(cell.to_string().as_str());
+            }
+            y_str.push_str(" | \n");
+            ret.push_str(y_str.as_str());
+        }
+        write!(f, "{}", ret)
+    }
 }
+pub struct Cell {
+    items: Vec<Item>,
+    visited: bool
+}
+
+const MAX_CELL_ITEMS: usize = 4;
 
 impl Cell {
     fn new(items: Vec<Item>) -> Self {
         Cell {
-            items
+            items,
+            visited: false
         }
     }
 }
@@ -54,11 +75,30 @@ impl Default for Cell {
     }
 }
 
+impl Display for Cell {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut ret = String::new();
+        for i in 0..MAX_CELL_ITEMS {
+            let item = self.items.get(i);
+            if self.visited {
+                ret.push_str(
+                    match item {
+                        Some(Item::Arrow) => { "A" },
+                        Some(Item::Coin) => { "C" },
+                        None => { "_" }
+                    }
+                );
+            } else {
+                ret.push_str("?");
+            }
+        }
+        write!(f, "{}", ret)
+    }
+}
+
 impl Clone for Cell {
     fn clone(&self) -> Self {
-        let mut cell =  Cell {
-            items: vec![]
-        };
+        let mut cell =  Cell::default();
         self.items.iter().for_each(|i| {
             cell.items.push(*i);
         });
