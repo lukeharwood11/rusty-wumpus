@@ -1,16 +1,8 @@
 
-use rusty_wumpus::game::board::Board;
-use rusty_wumpus::game::player::Player;
-
-
+use rusty_wumpus::game;
+use rusty_wumpus::util;
+use std::env;
 fn main() {
-    let width = 10;
-    let height = 4;
-    let board = Board::new(width, height);
-    let mut player = Player::default();
-    player.location = board.get_random_start();
-    println!("Width: {width}, Height: {height}");
-    println!("Player Location: {:?}", player.location);
-    println!("Number of cells: {}", board.cells.len());
-    println!("Board\n{}", board);
+    let args: Vec<_> = env::args().collect();
+    game::start();
 }
